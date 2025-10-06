@@ -91,9 +91,13 @@ export const loadBridgestoneData = async () => {
         
         // 価格から数値を抽出（例: "¥75,790" → 75790）
         const priceMatch = priceText.match(/¥?([\d,]+)/);
-        if (!priceMatch) return;
+        if (!priceMatch) {
+          console.log('価格マッチングエラー:', priceText);
+          return;
+        }
         
         const price = parseInt(priceMatch[1].replace(/,/g, ''));
+        console.log('価格抽出:', priceText, '→', price);
         
         tireData.push({
           brand: 'ブリヂストン',

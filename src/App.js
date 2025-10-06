@@ -63,6 +63,9 @@ function App() {
       // ブランドフィルタ
       if (params.brand && tire.brand !== params.brand) return false;
       
+      // モデルフィルタ
+      if (params.model && tire.model !== params.model) return false;
+      
       // タイプフィルタ
       if (params.type && tire.type !== params.type) return false;
       

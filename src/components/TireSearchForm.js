@@ -7,25 +7,33 @@ const TireSearchForm = ({ onSearch }) => {
     aspectRatio: '',
     diameter: '',
     brand: '',
+    model: '',
     type: '',
     minPrice: '',
     maxPrice: ''
   });
 
+  // ブリヂストンのみ対応
   const brands = [
-    '', 'ブリヂストン', 'ミシュラン', 'ヨコハマ', 'ダンロップ', 
-    'トーヨー', 'ファルケン', 'ハンコック', 'クムホ', 'ネクセン'
+    '', 'ブリヂストン'
+  ];
+
+  // ブリヂストンの冬タイヤモデル
+  const bridgestoneModels = [
+    '', 'WZ-1', 'VRX3', 'DM-V3', 'VL-10', 'W300', 'DM-V1'
   ];
 
   const tireTypes = [
-    '', '夏タイヤ', '冬タイヤ', 'オールシーズンタイヤ', 'レーシングタイヤ'
+    '', '冬タイヤ'
   ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
+      // ブランドが変更されたらモデルをリセット
+      ...(name === 'brand' ? { model: '' } : {})
     }));
   };
 
@@ -40,6 +48,7 @@ const TireSearchForm = ({ onSearch }) => {
       aspectRatio: '',
       diameter: '',
       brand: '',
+      model: '',
       type: '',
       minPrice: '',
       maxPrice: ''
@@ -108,6 +117,27 @@ const TireSearchForm = ({ onSearch }) => {
                   {brand || 'すべてのブランド'}
                 </option>
               ))}
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="model">銘柄</label>
+            <select
+              id="model"
+              name="model"
+              value={formData.model}
+              onChange={handleInputChange}
+              disabled={!formData.brand}
+            >
+              {formData.brand === 'ブリヂストン' ? (
+                bridgestoneModels.map(model => (
+                  <option key={model} value={model}>
+                    {model || 'すべての銘柄'}
+                  </option>
+                ))
+              ) : (
+                <option value="">ブランドを選択してください</option>
+              )}
             </select>
           </div>
           
