@@ -73,16 +73,22 @@ export const loadBridgestoneData = async () => {
       
       // 全角数字を半角に変換
       const normalizedSizeText = sizeText
-        .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
         .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
+      
+      console.log('サイズ変換:', sizeText, '→', normalizedSizeText);
       
       // サイズを解析（例: "225/40R18" → width: 225, aspectRatio: 40, diameter: 18）
       const sizeMatch = normalizedSizeText.match(/(\d+)\/(\d+)R(\d+)/);
-      if (!sizeMatch) return;
+      if (!sizeMatch) {
+        console.log('サイズマッチングエラー:', normalizedSizeText);
+        return;
+      }
       
       const width = parseInt(sizeMatch[1]);
       const aspectRatio = parseInt(sizeMatch[2]);
       const diameter = parseInt(sizeMatch[3]);
+      
+      console.log('サイズ解析:', normalizedSizeText, '→', { width, aspectRatio, diameter });
       
       // 各モデルの価格を処理
       modelColumns.forEach(modelName => {
@@ -117,7 +123,9 @@ export const loadBridgestoneData = async () => {
       });
     });
     
-    return tireData.filter(tire => tire.model && tire.width > 0 && tire.price > 0);
+    const filteredData = tireData.filter(tire => tire.model && tire.width > 0 && tire.price > 0);
+    console.log('作成されたタイヤデータ数:', filteredData.length);
+    return filteredData;
     
   } catch (error) {
     console.error('ブリヂストンデータ読み込みエラー:', error);

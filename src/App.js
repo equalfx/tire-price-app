@@ -54,7 +54,10 @@ function App() {
   };
 
   const filterTires = (tires, params) => {
-    return tires.filter(tire => {
+    console.log('検索パラメータ:', params);
+    console.log('検索対象タイヤ数:', tires.length);
+    
+    const filtered = tires.filter(tire => {
       // サイズフィルタ
       if (params.width && tire.width !== parseInt(params.width)) return false;
       if (params.aspectRatio && tire.aspectRatio !== parseInt(params.aspectRatio)) return false;
@@ -71,6 +74,9 @@ function App() {
       
       return true;
     });
+    
+    console.log('検索結果数:', filtered.length);
+    return filtered;
   };
 
   return (
