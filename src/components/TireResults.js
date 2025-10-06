@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TireResults.css';
 
-const TireResults = ({ results }) => {
+const TireResults = ({ results, laborCost = 2000 }) => {
   const [sortBy, setSortBy] = useState('price');
   const [sortOrder, setSortOrder] = useState('asc');
 
@@ -45,6 +45,22 @@ const TireResults = ({ results }) => {
     }).format(tire.price);
   };
 
+  const calculateTotalPrice = (tire) => {
+    const tirePrice = tire.price;
+    const totalBeforeTax = tirePrice + parseInt(laborCost);
+    const tax = Math.floor(totalBeforeTax * 0.1); // 消費税10%
+    return totalBeforeTax + tax;
+  };
+
+  const formatTotalPrice = (tire) => {
+    const totalPrice = calculateTotalPrice(tire);
+    return new Intl.NumberFormat('ja-JP', {
+      style: 'currency',
+      currency: 'JPY',
+      minimumFractionDigits: 0
+    }).format(totalPrice);
+  };
+
   const getTypeIcon = (type) => {
     switch (type) {
       case '夏タイヤ':
@@ -60,9 +76,6 @@ const TireResults = ({ results }) => {
     }
   };
 
-  const getPerformanceStars = (performance) => {
-    return '⭐'.repeat(performance);
-  };
 
   return (
     <div className="results-container">
@@ -117,24 +130,19 @@ const TireResults = ({ results }) => {
               ))}
             </div>
             
-            <div className="tire-performance">
-              <div className="performance-item">
-                <span>ウェット性能:</span>
-                <span>{getPerformanceStars(tire.wetPerformance)}</span>
+            <div className="tire-price-breakdown">
+              <div className="price-item">
+                <span>タイヤ価格:</span>
+                <span>{formatPrice(tire)}</span>
               </div>
-              <div className="performance-item">
-                <span>燃費:</span>
-                <span>{getPerformanceStars(tire.fuelEfficiency)}</span>
+              <div className="price-item">
+                <span>工賃:</span>
+                <span>¥{parseInt(laborCost).toLocaleString()}</span>
               </div>
-              <div className="performance-item">
-                <span>騒音:</span>
-                <span>{getPerformanceStars(tire.noiseLevel)}</span>
+              <div className="price-item total">
+                <span>税込合計:</span>
+                <span className="total-price">{formatTotalPrice(tire)}</span>
               </div>
-            </div>
-            
-            <div className="tire-price">
-              <span className="price-label">価格:</span>
-              <span className="price-value">{formatPrice(tire)}</span>
             </div>
             
             <div className="tire-actions">

@@ -11,6 +11,7 @@ function App() {
   const [allTireData, setAllTireData] = useState([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [dataSource, setDataSource] = useState('sample'); // 'sample' or 'csv'
+  const [searchParams, setSearchParams] = useState(null);
 
   // コンポーネントマウント時にデータを読み込み
   useEffect(() => {
@@ -42,12 +43,13 @@ function App() {
     loadData();
   }, []);
 
-  const handleSearch = (searchParams) => {
+  const handleSearch = (params) => {
     setIsSearching(true);
+    setSearchParams(params);
     
     // 短い検索遅延（リアルタイム検索用）
     setTimeout(() => {
-      const filteredResults = filterTires(allTireData, searchParams);
+      const filteredResults = filterTires(allTireData, params);
       setSearchResults(filteredResults);
       setIsSearching(false);
     }, 100);
@@ -111,7 +113,7 @@ function App() {
             )}
             
             {searchResults.length > 0 && !isSearching && (
-              <TireResults results={searchResults} />
+              <TireResults results={searchResults} laborCost={searchParams?.laborCost || 2000} />
             )}
             
             {searchResults.length === 0 && !isSearching && (

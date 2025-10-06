@@ -156,10 +156,7 @@
   margin-bottom: 0;
 }
 
-.tire-price {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.tire-price-breakdown {
   margin-bottom: 1rem;
   padding: 0.75rem;
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -167,13 +164,28 @@
   border: 2px solid #dee2e6;
 }
 
-.price-label {
-  font-weight: 600;
-  color: #34495e;
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
 
-.price-value {
-  font-size: 1.3rem;
+.price-item:last-child {
+  margin-bottom: 0;
+}
+
+.price-item.total {
+  border-top: 1px solid #dee2e6;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.total-price {
+  font-size: 1.2rem;
   font-weight: bold;
   color: #e74c3c;
 }

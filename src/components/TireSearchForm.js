@@ -8,7 +8,8 @@ const TireSearchForm = ({ onSearch }) => {
     diameter: '',
     brand: '',
     model: '',
-    type: ''
+    type: '',
+    laborCost: '2000' // デフォルト工賃2000円
   });
 
   // ブリヂストンのみ対応
@@ -60,7 +61,8 @@ const TireSearchForm = ({ onSearch }) => {
       diameter: '',
       brand: '',
       model: '',
-      type: ''
+      type: '',
+      laborCost: '2000'
     });
   };
 
@@ -168,6 +170,20 @@ const TireSearchForm = ({ onSearch }) => {
           </div>
         </div>
 
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="laborCost">工賃 (円/本)</label>
+            <input
+              type="number"
+              id="laborCost"
+              name="laborCost"
+              value={formData.laborCost}
+              onChange={handleInputChange}
+              placeholder="例: 2000"
+              min="0"
+            />
+          </div>
+        </div>
 
         <div className="form-actions">
           <button type="button" onClick={handleClear} className="clear-btn">
