@@ -55,20 +55,17 @@ const TireResults = ({ results, searchParams = {} }) => {
     return carTypes[searchParams.carType] || 6600;
   };
 
-  // 料金計算（タイヤ価格は既に消費税込み）
+  // 料金計算（全て税込み価格）
   const calculateTotalPrice = (tire) => {
     const tireQuantity = parseInt(searchParams.tireQuantity) || 4; // タイヤ本数
-    const tirePrice = tire.price * tireQuantity; // タイヤ価格 × 本数（既に消費税込み）
-    const laborCost = getLaborCost(); // 工賃（税抜）
-    const airValveCost = (searchParams.airValve || 4) * 429; // エアバルブ1本¥429（税抜）
-    const tireDisposalCost = (searchParams.tireDisposal || 4) * 550; // 廃タイヤ1本¥550（税抜）
-    const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0; // メンテナンスパック割引（税抜）
+    const tirePrice = tire.price * tireQuantity; // タイヤ価格 × 本数（税込み）
+    const laborCost = getLaborCost(); // 工賃（税込み）
+    const airValveCost = (searchParams.airValve || 4) * 429; // エアバルブ1本¥429（税込み）
+    const tireDisposalCost = (searchParams.tireDisposal || 4) * 550; // 廃タイヤ1本¥550（税込み）
+    const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0; // メンテナンスパック割引（税込み）
     
-    // 工賃、エアバルブ、廃タイヤ、メンテナンスパック割引にのみ消費税を適用
-    const additionalCosts = laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount;
-    const tax = Math.floor(additionalCosts * 0.1); // 追加費用のみに消費税10%
-    
-    return tirePrice + additionalCosts + tax;
+    // 全て税込み価格なのでそのまま合計
+    return tirePrice + laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount;
   };
 
   const formatTotalPrice = (tire) => {
@@ -80,20 +77,18 @@ const TireResults = ({ results, searchParams = {} }) => {
     }).format(totalPrice);
   };
 
-  // 価格内訳の計算（タイヤ価格は既に消費税込み）
+  // 価格内訳の計算（全て税込み価格）
   const calculatePriceBreakdown = (tire) => {
     const tireQuantity = parseInt(searchParams.tireQuantity) || 4; // タイヤ本数
-    const singleTirePrice = tire.price; // 1本のタイヤ価格（既に消費税込み）
-    const tirePrice = singleTirePrice * tireQuantity; // タイヤ価格 × 本数（既に消費税込み）
-    const laborCost = getLaborCost(); // 工賃（税抜）
-    const airValveCost = (searchParams.airValve || 4) * 429; // エアバルブ（税抜）
-    const tireDisposalCost = (searchParams.tireDisposal || 4) * 550; // 廃タイヤ（税抜）
-    const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0; // メンテナンスパック割引（税抜）
+    const singleTirePrice = tire.price; // 1本のタイヤ価格（税込み）
+    const tirePrice = singleTirePrice * tireQuantity; // タイヤ価格 × 本数（税込み）
+    const laborCost = getLaborCost(); // 工賃（税込み）
+    const airValveCost = (searchParams.airValve || 4) * 429; // エアバルブ（税込み）
+    const tireDisposalCost = (searchParams.tireDisposal || 4) * 550; // 廃タイヤ（税込み）
+    const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0; // メンテナンスパック割引（税込み）
     
-    // 工賃、エアバルブ、廃タイヤ、メンテナンスパック割引にのみ消費税を適用
-    const additionalCosts = laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount;
-    const tax = Math.floor(additionalCosts * 0.1); // 追加費用のみに消費税10%
-    const subtotal = tirePrice + additionalCosts; // 税抜小計（タイヤ価格は既に税込みなのでそのまま）
+    // 全て税込み価格なのでそのまま合計
+    const total = tirePrice + laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount;
     
     return {
       tireQuantity,
@@ -103,9 +98,7 @@ const TireResults = ({ results, searchParams = {} }) => {
       airValveCost,
       tireDisposalCost,
       maintenancePackDiscount,
-      subtotal,
-      tax,
-      total: calculateTotalPrice(tire)
+      total
     };
   };
 
@@ -184,41 +177,33 @@ const TireResults = ({ results, searchParams = {} }) => {
                 return (
                   <>
                     <div className="price-item">
-                      <span>タイヤ価格 ({breakdown.tireQuantity}本) 税込み:</span>
+                      <span>タイヤ価格 ({breakdown.tireQuantity}本):</span>
                       <span>¥{breakdown.tirePrice.toLocaleString()}</span>
                     </div>
                     <div className="price-item detail">
-                      <span>　└ 1本単価 税込み:</span>
+                      <span>　└ 1本単価:</span>
                       <span>¥{breakdown.singleTirePrice.toLocaleString()}</span>
                     </div>
                     <div className="price-item">
-                      <span>工賃 ({searchParams.carType || '軽・コンパクト'}) 税抜:</span>
+                      <span>工賃 ({searchParams.carType || '軽・コンパクト'}):</span>
                       <span>¥{breakdown.laborCost.toLocaleString()}</span>
                     </div>
                     <div className="price-item">
-                      <span>エアバルブ ({searchParams.airValve || 4}本) 税抜:</span>
+                      <span>エアバルブ ({searchParams.airValve || 4}本):</span>
                       <span>¥{breakdown.airValveCost.toLocaleString()}</span>
                     </div>
                     <div className="price-item">
-                      <span>廃タイヤ ({searchParams.tireDisposal || 4}本) 税抜:</span>
+                      <span>廃タイヤ ({searchParams.tireDisposal || 4}本):</span>
                       <span>¥{breakdown.tireDisposalCost.toLocaleString()}</span>
                     </div>
                     {breakdown.maintenancePackDiscount > 0 && (
                       <div className="price-item discount">
-                        <span>メンテナンスパック割引 税抜:</span>
+                        <span>メンテナンスパック割引:</span>
                         <span>-¥{breakdown.maintenancePackDiscount.toLocaleString()}</span>
                       </div>
                     )}
-                    <div className="price-item subtotal">
-                      <span>税抜小計:</span>
-                      <span>¥{breakdown.subtotal.toLocaleString()}</span>
-                    </div>
-                    <div className="price-item">
-                      <span>消費税 (10%):</span>
-                      <span>¥{breakdown.tax.toLocaleString()}</span>
-                    </div>
                     <div className="price-item total">
-                      <span>税込合計:</span>
+                      <span>合計:</span>
                       <span className="total-price">{formatTotalPrice(tire)}</span>
                     </div>
                   </>
