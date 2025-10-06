@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import './TireSearchForm.css';
 
 const TireSearchForm = ({ onSearch }) => {
-  const [formData, setFormData] = useState({
-    width: '',
-    aspectRatio: '',
-    diameter: '',
-    brand: '',
-    model: '',
-    type: '',
-    laborCost: '2000' // デフォルト工賃2000円
-  });
+        const [formData, setFormData] = useState({
+          width: '',
+          aspectRatio: '',
+          diameter: '',
+          brand: '',
+          model: '',
+          type: '',
+          carType: '軽・コンパクト', // 車種選択
+          maintenancePack: false, // メンテナンスパック加入
+          airValve: 4, // エアバルブ本数（デフォルト4本）
+          tireDisposal: 4 // 廃タイヤ本数（デフォルト4本）
+        });
 
   // ブリヂストンのみ対応
   const brands = [
@@ -26,11 +29,23 @@ const TireSearchForm = ({ onSearch }) => {
     '', '冬タイヤ'
   ];
 
+  // 車種別工賃
+  const carTypes = [
+    { value: '軽・コンパクト', label: '軽・コンパクト', laborCost: 6600 },
+    { value: 'ミディアム', label: 'ミディアム', laborCost: 7150 },
+    { value: 'ラージ以上', label: 'ラージ以上', laborCost: 9900 }
+  ];
+
+  // 料金設定
+  const MAINTENANCE_PACK_DISCOUNT = 1100; // メンテナンスパック割引
+  const AIR_VALVE_COST = 429; // エアバルブ1本
+  const TIRE_DISPOSAL_COST = 550; // 廃タイヤ1本
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     const newFormData = {
       ...formData,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
       // ブランドが変更されたらモデルをリセット
       ...(name === 'brand' ? { model: '' } : {})
     };
@@ -39,11 +54,12 @@ const TireSearchForm = ({ onSearch }) => {
     
     // サイズと種類が選択されたら自動検索
     if (name === 'width' || name === 'aspectRatio' || name === 'diameter' || 
-        name === 'brand' || name === 'model' || name === 'type') {
+        name === 'brand' || name === 'model' || name === 'type' || name === 'carType' ||
+        name === 'maintenancePack' || name === 'airValve' || name === 'tireDisposal') {
       const hasSize = newFormData.width || newFormData.aspectRatio || newFormData.diameter;
       const hasType = newFormData.type;
       
-      if (hasSize || hasType) {
+      if (hasSize || hasType || newFormData.brand || newFormData.model) { // ブランドやモデル選択でも検索をトリガー
         onSearch(newFormData);
       }
     }
@@ -55,15 +71,20 @@ const TireSearchForm = ({ onSearch }) => {
   };
 
   const handleClear = () => {
-    setFormData({
+    const clearedData = {
       width: '',
       aspectRatio: '',
       diameter: '',
       brand: '',
       model: '',
       type: '',
-      laborCost: '2000'
-    });
+      carType: '軽・コンパクト',
+      maintenancePack: false,
+      airValve: 4,
+      tireDisposal: 4
+    };
+    setFormData(clearedData);
+    onSearch(clearedData);
   };
 
   return (
@@ -172,16 +193,60 @@ const TireSearchForm = ({ onSearch }) => {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="laborCost">工賃 (円/本)</label>
+            <label htmlFor="carType">車種</label>
+            <select
+              id="carType"
+              name="carType"
+              value={formData.carType}
+              onChange={handleInputChange}
+            >
+              {carTypes.map(carType => (
+                <option key={carType.value} value={carType.value}>
+                  {carType.label} (¥{carType.laborCost.toLocaleString()})
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="airValve">エアバルブ (本)</label>
             <input
               type="number"
-              id="laborCost"
-              name="laborCost"
-              value={formData.laborCost}
+              id="airValve"
+              name="airValve"
+              value={formData.airValve}
               onChange={handleInputChange}
-              placeholder="例: 2000"
               min="0"
+              max="10"
             />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="tireDisposal">廃タイヤ (本)</label>
+            <input
+              type="number"
+              id="tireDisposal"
+              name="tireDisposal"
+              value={formData.tireDisposal}
+              onChange={handleInputChange}
+              min="0"
+              max="10"
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group checkbox-group">
+            <label htmlFor="maintenancePack">
+              <input
+                type="checkbox"
+                id="maintenancePack"
+                name="maintenancePack"
+                checked={formData.maintenancePack}
+                onChange={handleInputChange}
+              />
+              メンテナンスパック加入 (-¥{MAINTENANCE_PACK_DISCOUNT.toLocaleString()})
+            </label>
           </div>
         </div>
 

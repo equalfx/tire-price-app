@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TireResults.css';
 
-const TireResults = ({ results, laborCost = 2000 }) => {
+const TireResults = ({ results, searchParams = {} }) => {
   const [sortBy, setSortBy] = useState('price');
   const [sortOrder, setSortOrder] = useState('asc');
 
@@ -45,11 +45,27 @@ const TireResults = ({ results, laborCost = 2000 }) => {
     }).format(tire.price);
   };
 
+  // 車種別工賃
+  const getLaborCost = () => {
+    const carTypes = {
+      '軽・コンパクト': 6600,
+      'ミディアム': 7150,
+      'ラージ以上': 9900
+    };
+    return carTypes[searchParams.carType] || 6600;
+  };
+
+  // 料金計算
   const calculateTotalPrice = (tire) => {
     const tirePrice = tire.price;
-    const totalBeforeTax = tirePrice + parseInt(laborCost);
-    const tax = Math.floor(totalBeforeTax * 0.1); // 消費税10%
-    return totalBeforeTax + tax;
+    const laborCost = getLaborCost();
+    const airValveCost = (searchParams.airValve || 4) * 429; // エアバルブ1本¥429
+    const tireDisposalCost = (searchParams.tireDisposal || 4) * 550; // 廃タイヤ1本¥550
+    const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0; // メンテナンスパック割引
+    
+    const subtotal = tirePrice + laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount;
+    const tax = Math.floor(subtotal * 0.1); // 消費税10%
+    return subtotal + tax;
   };
 
   const formatTotalPrice = (tire) => {
@@ -59,6 +75,26 @@ const TireResults = ({ results, laborCost = 2000 }) => {
       currency: 'JPY',
       minimumFractionDigits: 0
     }).format(totalPrice);
+  };
+
+  // 価格内訳の計算
+  const calculatePriceBreakdown = (tire) => {
+    const tirePrice = tire.price;
+    const laborCost = getLaborCost();
+    const airValveCost = (searchParams.airValve || 4) * 429;
+    const tireDisposalCost = (searchParams.tireDisposal || 4) * 550;
+    const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0;
+    
+    return {
+      tirePrice,
+      laborCost,
+      airValveCost,
+      tireDisposalCost,
+      maintenancePackDiscount,
+      subtotal: tirePrice + laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount,
+      tax: Math.floor((tirePrice + laborCost + airValveCost + tireDisposalCost - maintenancePackDiscount) * 0.1),
+      total: calculateTotalPrice(tire)
+    };
   };
 
   const getTypeIcon = (type) => {
@@ -131,18 +167,47 @@ const TireResults = ({ results, laborCost = 2000 }) => {
             </div>
             
             <div className="tire-price-breakdown">
-              <div className="price-item">
-                <span>タイヤ価格:</span>
-                <span>{formatPrice(tire)}</span>
-              </div>
-              <div className="price-item">
-                <span>工賃:</span>
-                <span>¥{parseInt(laborCost).toLocaleString()}</span>
-              </div>
-              <div className="price-item total">
-                <span>税込合計:</span>
-                <span className="total-price">{formatTotalPrice(tire)}</span>
-              </div>
+              {(() => {
+                const breakdown = calculatePriceBreakdown(tire);
+                return (
+                  <>
+                    <div className="price-item">
+                      <span>タイヤ価格:</span>
+                      <span>{formatPrice(tire)}</span>
+                    </div>
+                    <div className="price-item">
+                      <span>工賃 ({searchParams.carType || '軽・コンパクト'}):</span>
+                      <span>¥{breakdown.laborCost.toLocaleString()}</span>
+                    </div>
+                    <div className="price-item">
+                      <span>エアバルブ ({searchParams.airValve || 4}本):</span>
+                      <span>¥{breakdown.airValveCost.toLocaleString()}</span>
+                    </div>
+                    <div className="price-item">
+                      <span>廃タイヤ ({searchParams.tireDisposal || 4}本):</span>
+                      <span>¥{breakdown.tireDisposalCost.toLocaleString()}</span>
+                    </div>
+                    {breakdown.maintenancePackDiscount > 0 && (
+                      <div className="price-item discount">
+                        <span>メンテナンスパック割引:</span>
+                        <span>-¥{breakdown.maintenancePackDiscount.toLocaleString()}</span>
+                      </div>
+                    )}
+                    <div className="price-item subtotal">
+                      <span>小計:</span>
+                      <span>¥{breakdown.subtotal.toLocaleString()}</span>
+                    </div>
+                    <div className="price-item">
+                      <span>消費税 (10%):</span>
+                      <span>¥{breakdown.tax.toLocaleString()}</span>
+                    </div>
+                    <div className="price-item total">
+                      <span>税込合計:</span>
+                      <span className="total-price">{formatTotalPrice(tire)}</span>
+                    </div>
+                  </>
+                );
+              })()}
             </div>
             
             <div className="tire-actions">

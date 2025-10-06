@@ -113,7 +113,7 @@ function App() {
             )}
             
             {searchResults.length > 0 && !isSearching && (
-              <TireResults results={searchResults} laborCost={searchParams?.laborCost || 2000} />
+              <TireResults results={searchResults} searchParams={searchParams} />
             )}
             
             {searchResults.length === 0 && !isSearching && (
