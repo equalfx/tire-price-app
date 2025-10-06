@@ -57,7 +57,8 @@ const TireResults = ({ results, searchParams = {} }) => {
 
   // 料金計算
   const calculateTotalPrice = (tire) => {
-    const tirePrice = tire.price;
+    const tireQuantity = parseInt(searchParams.tireQuantity) || 4; // タイヤ本数
+    const tirePrice = tire.price * tireQuantity; // タイヤ価格 × 本数
     const laborCost = getLaborCost();
     const airValveCost = (searchParams.airValve || 4) * 429; // エアバルブ1本¥429
     const tireDisposalCost = (searchParams.tireDisposal || 4) * 550; // 廃タイヤ1本¥550
@@ -79,13 +80,17 @@ const TireResults = ({ results, searchParams = {} }) => {
 
   // 価格内訳の計算
   const calculatePriceBreakdown = (tire) => {
-    const tirePrice = tire.price;
+    const tireQuantity = parseInt(searchParams.tireQuantity) || 4; // タイヤ本数
+    const singleTirePrice = tire.price; // 1本のタイヤ価格
+    const tirePrice = singleTirePrice * tireQuantity; // タイヤ価格 × 本数
     const laborCost = getLaborCost();
     const airValveCost = (searchParams.airValve || 4) * 429;
     const tireDisposalCost = (searchParams.tireDisposal || 4) * 550;
     const maintenancePackDiscount = searchParams.maintenancePack ? 1100 : 0;
     
     return {
+      tireQuantity,
+      singleTirePrice,
       tirePrice,
       laborCost,
       airValveCost,
@@ -172,8 +177,12 @@ const TireResults = ({ results, searchParams = {} }) => {
                 return (
                   <>
                     <div className="price-item">
-                      <span>タイヤ価格:</span>
-                      <span>{formatPrice(tire)}</span>
+                      <span>タイヤ価格 ({breakdown.tireQuantity}本):</span>
+                      <span>¥{breakdown.tirePrice.toLocaleString()}</span>
+                    </div>
+                    <div className="price-item detail">
+                      <span>　└ 1本単価:</span>
+                      <span>¥{breakdown.singleTirePrice.toLocaleString()}</span>
                     </div>
                     <div className="price-item">
                       <span>工賃 ({searchParams.carType || '軽・コンパクト'}):</span>

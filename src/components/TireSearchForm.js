@@ -12,7 +12,8 @@ const TireSearchForm = ({ onSearch }) => {
           carType: '軽・コンパクト', // 車種選択
           maintenancePack: false, // メンテナンスパック加入
           airValve: 4, // エアバルブ本数（デフォルト4本）
-          tireDisposal: 4 // 廃タイヤ本数（デフォルト4本）
+          tireDisposal: 4, // 廃タイヤ本数（デフォルト4本）
+          tireQuantity: 4 // タイヤ本数（デフォルト4本）
         });
 
   // ブリヂストンのみ対応
@@ -55,7 +56,7 @@ const TireSearchForm = ({ onSearch }) => {
     // サイズと種類が選択されたら自動検索
     if (name === 'width' || name === 'aspectRatio' || name === 'diameter' || 
         name === 'brand' || name === 'model' || name === 'type' || name === 'carType' ||
-        name === 'maintenancePack' || name === 'airValve' || name === 'tireDisposal') {
+        name === 'maintenancePack' || name === 'airValve' || name === 'tireDisposal' || name === 'tireQuantity') {
       const hasSize = newFormData.width || newFormData.aspectRatio || newFormData.diameter;
       const hasType = newFormData.type;
       
@@ -81,7 +82,8 @@ const TireSearchForm = ({ onSearch }) => {
       carType: '軽・コンパクト',
       maintenancePack: false,
       airValve: 4,
-      tireDisposal: 4
+      tireDisposal: 4,
+      tireQuantity: 4
     };
     setFormData(clearedData);
     onSearch(clearedData);
@@ -209,6 +211,21 @@ const TireSearchForm = ({ onSearch }) => {
           </div>
           
           <div className="form-group">
+            <label htmlFor="tireQuantity">タイヤ本数</label>
+            <select
+              id="tireQuantity"
+              name="tireQuantity"
+              value={formData.tireQuantity}
+              onChange={handleInputChange}
+            >
+              <option value="1">1本</option>
+              <option value="2">2本</option>
+              <option value="3">3本</option>
+              <option value="4">4本</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
             <label htmlFor="airValve">エアバルブ (本)</label>
             <input
               type="number"
@@ -220,7 +237,9 @@ const TireSearchForm = ({ onSearch }) => {
               max="10"
             />
           </div>
-          
+        </div>
+
+        <div className="form-row">
           <div className="form-group">
             <label htmlFor="tireDisposal">廃タイヤ (本)</label>
             <input

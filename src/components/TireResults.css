@@ -188,6 +188,12 @@
   font-weight: 600;
 }
 
+.price-item.detail {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
 .price-item.total {
   border-top: 2px solid #3498db;
   padding-top: 0.5rem;
