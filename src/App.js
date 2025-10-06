@@ -84,12 +84,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>🚗 タイヤ価格検索アプリ</h1>
+        <h1>🚗 タイヤ検索アプリ</h1>
         <p>最適なタイヤを探してみましょう</p>
         {!isLoadingData && (
           <div className="data-source-info">
             {dataSource === 'csv' ? (
-              <span>📊 実際のブリヂストンデータ ({allTireData.length}件)</span>
+              <span>📊 実際のタイヤデータ ({allTireData.length}件)</span>
             ) : (
               <span>📝 サンプルデータ ({allTireData.length}件)</span>
             )}

@@ -91,7 +91,7 @@ const TireSearchForm = ({ onSearch }) => {
 
   return (
     <div className="search-form-container">
-      <h2>🔍 ブリヂストン冬タイヤ検索</h2>
+      <h2>🔍 タイヤ検索</h2>
       <p>サイズや種類を選択すると自動的に価格が表示されます</p>
       <form onSubmit={handleSubmit} className="search-form">
         <div className="form-row">
