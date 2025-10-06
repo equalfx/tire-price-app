@@ -1,31 +1,31 @@
-// CSVパーサー関数
+// CSVパーサー関数（簡略版）
 export const parseCSV = (csvText) => {
-  const lines = csvText.split('\n');
-  const headers = lines[0].split(',').map(header => header.trim());
+  const lines = csvText.split('\n').filter(line => line.trim());
+  if (lines.length === 0) return [];
   
+  const headers = lines[0].split(',').map(header => header.trim());
   const data = [];
   
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
     
+    // 簡単な分割（カンマ区切り、ダブルクォート対応）
     const values = [];
-    let currentValue = '';
+    let current = '';
     let inQuotes = false;
     
-    for (let j = 0; j < line.length; j++) {
-      const char = line[j];
-      
+    for (let char of line) {
       if (char === '"') {
         inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
-        values.push(currentValue.trim());
-        currentValue = '';
+        values.push(current.trim());
+        current = '';
       } else {
-        currentValue += char;
+        current += char;
       }
     }
-    values.push(currentValue.trim());
+    values.push(current.trim());
     
     // オブジェクトに変換
     const row = {};
@@ -36,6 +36,7 @@ export const parseCSV = (csvText) => {
     data.push(row);
   }
   
+  console.log('CSV解析結果:', data.length, '行');
   return data;
 };
 
@@ -57,19 +58,36 @@ export const loadCSVData = async (csvPath) => {
 // ブリヂストンデータを読み込む関数
 export const loadBridgestoneData = async () => {
   try {
+    console.log('CSVデータ読み込み開始...');
     const csvData = await loadCSVData('/data/bridgestone_data.csv');
+    console.log('CSVデータ取得成功:', csvData.length, '行');
+    
+    if (csvData.length === 0) {
+      console.log('CSVデータが空です');
+      return [];
+    }
     
     // 横型CSVデータを縦型に変換
     const tireData = [];
     
     // ヘッダー行（1行目）からモデル名を取得
     const headers = Object.keys(csvData[0]);
+    console.log('CSVヘッダー:', headers);
+    
     const sizeColumn = headers[0]; // 最初のカラムはサイズ
     const modelColumns = headers.slice(1); // 残りはモデル名
     
-    csvData.forEach(row => {
+    console.log('サイズカラム:', sizeColumn);
+    console.log('モデルカラム:', modelColumns);
+    
+    csvData.forEach((row, rowIndex) => {
       const sizeText = row[sizeColumn];
-      if (!sizeText) return;
+      if (!sizeText) {
+        console.log(`行 ${rowIndex + 1}: サイズテキストが空`);
+        return;
+      }
+      
+      console.log(`行 ${rowIndex + 1}: サイズテキスト =`, sizeText);
       
       // 全角数字を半角に変換
       const normalizedSizeText = sizeText
@@ -93,7 +111,12 @@ export const loadBridgestoneData = async () => {
       // 各モデルの価格を処理
       modelColumns.forEach(modelName => {
         const priceText = row[modelName];
-        if (!priceText || priceText.trim() === '') return;
+        if (!priceText || priceText.trim() === '') {
+          console.log(`モデル ${modelName}: 価格が空`);
+          return;
+        }
+        
+        console.log(`モデル ${modelName}: 価格テキスト =`, priceText);
         
         // 価格から数値を抽出（例: "¥75,790" → 75790）
         const priceMatch = priceText.match(/¥?([\d,]+)/);
@@ -125,6 +148,7 @@ export const loadBridgestoneData = async () => {
     
     const filteredData = tireData.filter(tire => tire.model && tire.width > 0 && tire.price > 0);
     console.log('作成されたタイヤデータ数:', filteredData.length);
+    console.log('最初の3件:', filteredData.slice(0, 3));
     return filteredData;
     
   } catch (error) {
