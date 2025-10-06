@@ -120,6 +120,14 @@
     padding: 1.5rem;
   }
   
+  .search-form-container h2 {
+    font-size: 1.3rem;
+  }
+  
+  .search-form-container p {
+    font-size: 0.8rem;
+  }
+  
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -131,5 +139,32 @@
   .search-btn,
   .clear-btn {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-form-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .search-form-container h2 {
+    font-size: 1.2rem;
+  }
+  
+  .search-form-container p {
+    font-size: 0.75rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .search-btn,
+  .clear-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 }

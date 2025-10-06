@@ -228,20 +228,100 @@
 }
 
 @media (max-width: 768px) {
+  .results-container {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+  
   .results-header {
     flex-direction: column;
     align-items: flex-start;
   }
   
+  .results-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .sort-controls {
+    margin-top: 0.5rem;
+  }
+  
   .tire-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .tire-card {
     padding: 1rem;
   }
   
+  .tire-brand {
+    font-size: 1.1rem;
+  }
+  
+  .tire-model {
+    font-size: 1rem;
+  }
+  
   .tire-actions {
     flex-direction: column;
+  }
+  
+  .price-item.total {
+    font-size: 0.9rem;
+  }
+  
+  .total-price {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .results-container {
+    margin: 0.5rem auto;
+    padding: 0 0.25rem;
+  }
+  
+  .results-header h2 {
+    font-size: 1.2rem;
+  }
+  
+  .tire-card {
+    padding: 0.75rem;
+  }
+  
+  .tire-brand {
+    font-size: 1rem;
+  }
+  
+  .tire-model {
+    font-size: 0.9rem;
+  }
+  
+  .size-value {
+    font-size: 1rem;
+  }
+  
+  .feature-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .price-item {
+    font-size: 0.8rem;
+  }
+  
+  .price-item.total {
+    font-size: 0.85rem;
+  }
+  
+  .total-price {
+    font-size: 1rem;
+  }
+  
+  .detail-btn,
+  .compare-btn {
+    padding: 0.6rem;
+    font-size: 0.8rem;
   }
 }

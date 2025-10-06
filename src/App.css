@@ -90,15 +90,41 @@ body {
 }
 
 @media (max-width: 768px) {
+  .App-header {
+    padding: 1.5rem 0.5rem;
+  }
+  
   .App-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
   }
   
   .App-header p {
-    font-size: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .data-source-info {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
   }
   
   .App-main {
     padding: 1rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .App-header p {
+    font-size: 0.8rem;
+  }
+  
+  .data-source-info {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
   }
 }
