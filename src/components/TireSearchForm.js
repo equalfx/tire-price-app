@@ -3,7 +3,9 @@ import './TireSearchForm.css';
 
 const TireSearchForm = ({ onSearch }) => {
         const [formData, setFormData] = useState({
-          tireSize: '', // タイヤサイズ選択
+          width: '',
+          aspectRatio: '',
+          diameter: '',
           brand: '',
           model: '',
           type: '',
@@ -28,52 +30,19 @@ const TireSearchForm = ({ onSearch }) => {
     '', '冬タイヤ'
   ];
 
-  // 一般的なタイヤサイズ（実際のCSVデータから抽出）
-  const tireSizes = [
-    { width: '', aspectRatio: '', diameter: '', label: 'サイズを選択してください' },
-    { width: '165', aspectRatio: '65', diameter: '14', label: '165/65R14' },
-    { width: '175', aspectRatio: '65', diameter: '14', label: '175/65R14' },
-    { width: '185', aspectRatio: '60', diameter: '14', label: '185/60R14' },
-    { width: '185', aspectRatio: '65', diameter: '14', label: '185/65R14' },
-    { width: '175', aspectRatio: '65', diameter: '15', label: '175/65R15' },
-    { width: '185', aspectRatio: '60', diameter: '15', label: '185/60R15' },
-    { width: '185', aspectRatio: '65', diameter: '15', label: '185/65R15' },
-    { width: '195', aspectRatio: '60', diameter: '15', label: '195/60R15' },
-    { width: '195', aspectRatio: '65', diameter: '15', label: '195/65R15' },
-    { width: '205', aspectRatio: '60', diameter: '15', label: '205/60R15' },
-    { width: '205', aspectRatio: '65', diameter: '15', label: '205/65R15' },
-    { width: '185', aspectRatio: '55', diameter: '16', label: '185/55R16' },
-    { width: '195', aspectRatio: '50', diameter: '16', label: '195/50R16' },
-    { width: '195', aspectRatio: '55', diameter: '16', label: '195/55R16' },
-    { width: '195', aspectRatio: '60', diameter: '16', label: '195/60R16' },
-    { width: '205', aspectRatio: '50', diameter: '16', label: '205/50R16' },
-    { width: '205', aspectRatio: '55', diameter: '16', label: '205/55R16' },
-    { width: '205', aspectRatio: '60', diameter: '16', label: '205/60R16' },
-    { width: '215', aspectRatio: '55', diameter: '16', label: '215/55R16' },
-    { width: '225', aspectRatio: '50', diameter: '16', label: '225/50R16' },
-    { width: '225', aspectRatio: '55', diameter: '16', label: '225/55R16' },
-    { width: '195', aspectRatio: '50', diameter: '17', label: '195/50R17' },
-    { width: '205', aspectRatio: '45', diameter: '17', label: '205/45R17' },
-    { width: '205', aspectRatio: '50', diameter: '17', label: '205/50R17' },
-    { width: '215', aspectRatio: '45', diameter: '17', label: '215/45R17' },
-    { width: '215', aspectRatio: '50', diameter: '17', label: '215/50R17' },
-    { width: '225', aspectRatio: '45', diameter: '17', label: '225/45R17' },
-    { width: '225', aspectRatio: '50', diameter: '17', label: '225/50R17' },
-    { width: '235', aspectRatio: '45', diameter: '17', label: '235/45R17' },
-    { width: '205', aspectRatio: '40', diameter: '18', label: '205/40R18' },
-    { width: '215', aspectRatio: '40', diameter: '18', label: '215/40R18' },
-    { width: '215', aspectRatio: '45', diameter: '18', label: '215/45R18' },
-    { width: '225', aspectRatio: '40', diameter: '18', label: '225/40R18' },
-    { width: '225', aspectRatio: '45', diameter: '18', label: '225/45R18' },
-    { width: '235', aspectRatio: '40', diameter: '18', label: '235/40R18' },
-    { width: '235', aspectRatio: '45', diameter: '18', label: '235/45R18' },
-    { width: '245', aspectRatio: '40', diameter: '18', label: '245/40R18' },
-    { width: '255', aspectRatio: '40', diameter: '18', label: '255/40R18' },
-    { width: '225', aspectRatio: '35', diameter: '19', label: '225/35R19' },
-    { width: '235', aspectRatio: '35', diameter: '19', label: '235/35R19' },
-    { width: '245', aspectRatio: '35', diameter: '19', label: '245/35R19' },
-    { width: '255', aspectRatio: '35', diameter: '19', label: '255/35R19' },
-    { width: '265', aspectRatio: '35', diameter: '19', label: '265/35R19' }
+  // タイヤ幅の選択肢
+  const tireWidths = [
+    '', '165', '175', '185', '195', '205', '215', '225', '235', '245', '255', '265'
+  ];
+
+  // 扁平率の選択肢
+  const aspectRatios = [
+    '', '25', '30', '35', '40', '45', '50', '55', '60', '65', '70', '75', '80', '85'
+  ];
+
+  // リム径の選択肢
+  const rimDiameters = [
+    '', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22'
   ];
 
   // 車種別工賃
@@ -90,39 +59,20 @@ const TireSearchForm = ({ onSearch }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    let newFormData = {
+    const newFormData = {
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
       // ブランドが変更されたらモデルをリセット
       ...(name === 'brand' ? { model: '' } : {})
     };
-
-    // タイヤサイズが選択された場合、width, aspectRatio, diameterを設定
-    if (name === 'tireSize') {
-      const selectedSize = tireSizes.find(size => size.label === value);
-      if (selectedSize && selectedSize.width) {
-        newFormData = {
-          ...newFormData,
-          width: selectedSize.width,
-          aspectRatio: selectedSize.aspectRatio,
-          diameter: selectedSize.diameter
-        };
-      } else {
-        newFormData = {
-          ...newFormData,
-          width: '',
-          aspectRatio: '',
-          diameter: ''
-        };
-      }
-    }
     
     setFormData(newFormData);
     
     // サイズと種類が選択されたら自動検索
-    if (name === 'tireSize' || name === 'brand' || name === 'model' || name === 'type' || name === 'carType' ||
+    if (name === 'width' || name === 'aspectRatio' || name === 'diameter' || 
+        name === 'brand' || name === 'model' || name === 'type' || name === 'carType' ||
         name === 'maintenancePack' || name === 'airValve' || name === 'tireDisposal' || name === 'tireQuantity') {
-      const hasSize = newFormData.tireSize || newFormData.width || newFormData.aspectRatio || newFormData.diameter;
+      const hasSize = newFormData.width || newFormData.aspectRatio || newFormData.diameter;
       const hasType = newFormData.type;
       
       if (hasSize || hasType || newFormData.brand || newFormData.model) { // ブランドやモデル選択でも検索をトリガー
@@ -138,7 +88,9 @@ const TireSearchForm = ({ onSearch }) => {
 
   const handleClear = () => {
     const clearedData = {
-      tireSize: '',
+      width: '',
+      aspectRatio: '',
+      diameter: '',
       brand: '',
       model: '',
       type: '',
@@ -159,16 +111,48 @@ const TireSearchForm = ({ onSearch }) => {
       <form onSubmit={handleSubmit} className="search-form">
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="tireSize">タイヤサイズ</label>
+            <label htmlFor="width">タイヤ幅 (mm)</label>
             <select
-              id="tireSize"
-              name="tireSize"
-              value={formData.tireSize}
+              id="width"
+              name="width"
+              value={formData.width}
               onChange={handleInputChange}
             >
-              {tireSizes.map(size => (
-                <option key={size.label} value={size.label}>
-                  {size.label}
+              {tireWidths.map(width => (
+                <option key={width} value={width}>
+                  {width || '幅を選択'}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="aspectRatio">扁平率 (%)</label>
+            <select
+              id="aspectRatio"
+              name="aspectRatio"
+              value={formData.aspectRatio}
+              onChange={handleInputChange}
+            >
+              {aspectRatios.map(ratio => (
+                <option key={ratio} value={ratio}>
+                  {ratio || '扁平率を選択'}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="diameter">リム径 (インチ)</label>
+            <select
+              id="diameter"
+              name="diameter"
+              value={formData.diameter}
+              onChange={handleInputChange}
+            >
+              {rimDiameters.map(diameter => (
+                <option key={diameter} value={diameter}>
+                  {diameter || 'リム径を選択'}
                 </option>
               ))}
             </select>
