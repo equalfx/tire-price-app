@@ -33,12 +33,16 @@ const TireResults = ({ results }) => {
     }
   });
 
-  const formatPrice = (price) => {
+  const formatPrice = (tire) => {
+    // 実際の価格表記があればそれを使用、なければフォーマット済み価格を使用
+    if (tire.originalPriceText) {
+      return tire.originalPriceText;
+    }
     return new Intl.NumberFormat('ja-JP', {
       style: 'currency',
       currency: 'JPY',
       minimumFractionDigits: 0
-    }).format(price);
+    }).format(tire.price);
   };
 
   const getTypeIcon = (type) => {
@@ -101,7 +105,7 @@ const TireResults = ({ results }) => {
             <div className="tire-size">
               <span className="size-label">サイズ:</span>
               <span className="size-value">
-                {tire.width}/{tire.aspectRatio}R{tire.diameter}
+                {tire.sizeText || `${tire.width}/${tire.aspectRatio}R${tire.diameter}`}
               </span>
             </div>
             
@@ -130,7 +134,7 @@ const TireResults = ({ results }) => {
             
             <div className="tire-price">
               <span className="price-label">価格:</span>
-              <span className="price-value">{formatPrice(tire.price)}</span>
+              <span className="price-value">{formatPrice(tire)}</span>
             </div>
             
             <div className="tire-actions">

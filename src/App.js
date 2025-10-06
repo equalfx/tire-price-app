@@ -1,19 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import TireSearchForm from './components/TireSearchForm';
 import TireResults from './components/TireResults';
 import { sampleTireData } from './data/sampleData';
+import { loadBridgestoneData } from './utils/csvParser';
 
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [allTireData, setAllTireData] = useState([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [dataSource, setDataSource] = useState('sample'); // 'sample' or 'csv'
+
+  // コンポーネントマウント時にデータを読み込み
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoadingData(true);
+      try {
+        // まずCSVデータを試す
+        const csvData = await loadBridgestoneData();
+        if (csvData.length > 0) {
+          setAllTireData(csvData);
+          setDataSource('csv');
+          console.log(`CSVデータを読み込みました: ${csvData.length}件`);
+        } else {
+          // CSVデータがない場合はサンプルデータを使用
+          setAllTireData(sampleTireData);
+          setDataSource('sample');
+          console.log('サンプルデータを使用します');
+        }
+      } catch (error) {
+        console.error('データ読み込みエラー:', error);
+        // エラーの場合はサンプルデータを使用
+        setAllTireData(sampleTireData);
+        setDataSource('sample');
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const handleSearch = (searchParams) => {
     setIsSearching(true);
     
     // シミュレートされた検索遅延
     setTimeout(() => {
-      const filteredResults = filterTires(sampleTireData, searchParams);
+      const filteredResults = filterTires(allTireData, searchParams);
       setSearchResults(filteredResults);
       setIsSearching(false);
     }, 500);
@@ -45,24 +79,41 @@ function App() {
       <header className="App-header">
         <h1>🚗 タイヤ価格検索アプリ</h1>
         <p>最適なタイヤを探してみましょう</p>
+        {!isLoadingData && (
+          <div className="data-source-info">
+            {dataSource === 'csv' ? (
+              <span>📊 実際のブリヂストンデータ ({allTireData.length}件)</span>
+            ) : (
+              <span>📝 サンプルデータ ({allTireData.length}件)</span>
+            )}
+          </div>
+        )}
       </header>
       
       <main className="App-main">
-        <TireSearchForm onSearch={handleSearch} />
-        
-        {isSearching && (
+        {isLoadingData ? (
           <div className="loading">
-            <p>検索中...</p>
+            <p>データを読み込み中...</p>
           </div>
-        )}
-        
-        {searchResults.length > 0 && !isSearching && (
-          <TireResults results={searchResults} />
-        )}
-        
-        {searchResults.length === 0 && !isSearching && (
-          <div className="no-results">
-            <p>検索条件に一致するタイヤが見つかりませんでした。</p>
+        ) : (
+          <div>
+            <TireSearchForm onSearch={handleSearch} />
+            
+            {isSearching && (
+              <div className="loading">
+                <p>検索中...</p>
+              </div>
+            )}
+            
+            {searchResults.length > 0 && !isSearching && (
+              <TireResults results={searchResults} />
+            )}
+            
+            {searchResults.length === 0 && !isSearching && (
+              <div className="no-results">
+                <p>検索条件に一致するタイヤが見つかりませんでした。</p>
+              </div>
+            )}
           </div>
         )}
       </main>
