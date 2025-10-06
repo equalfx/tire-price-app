@@ -89,16 +89,13 @@ export const loadBridgestoneData = async () => {
       
       console.log(`行 ${rowIndex + 1}: サイズテキスト =`, sizeText);
       
-      // 全角数字を半角に変換
-      const normalizedSizeText = sizeText
-        .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
-      
-      console.log('サイズ変換:', sizeText, '→', normalizedSizeText);
+      // 半角数字なので直接解析
+      console.log('サイズテキスト:', sizeText);
       
       // サイズを解析（例: "225/40R18" → width: 225, aspectRatio: 40, diameter: 18）
-      const sizeMatch = normalizedSizeText.match(/(\d+)\/(\d+)R(\d+)/);
+      const sizeMatch = sizeText.match(/(\d+)\/(\d+)R(\d+)/);
       if (!sizeMatch) {
-        console.log('サイズマッチングエラー:', normalizedSizeText);
+        console.log('サイズマッチングエラー:', sizeText);
         return;
       }
       
@@ -106,7 +103,7 @@ export const loadBridgestoneData = async () => {
       const aspectRatio = parseInt(sizeMatch[2]);
       const diameter = parseInt(sizeMatch[3]);
       
-      console.log('サイズ解析:', normalizedSizeText, '→', { width, aspectRatio, diameter });
+      console.log('サイズ解析:', sizeText, '→', { width, aspectRatio, diameter });
       
       // 各モデルの価格を処理
       modelColumns.forEach(modelName => {
