@@ -8,9 +8,7 @@ const TireSearchForm = ({ onSearch }) => {
     diameter: '',
     brand: '',
     model: '',
-    type: '',
-    minPrice: '',
-    maxPrice: ''
+    type: ''
   });
 
   // ブリヂストンのみ対応
@@ -29,12 +27,25 @@ const TireSearchForm = ({ onSearch }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    const newFormData = {
+      ...formData,
       [name]: value,
       // ブランドが変更されたらモデルをリセット
       ...(name === 'brand' ? { model: '' } : {})
-    }));
+    };
+    
+    setFormData(newFormData);
+    
+    // サイズと種類が選択されたら自動検索
+    if (name === 'width' || name === 'aspectRatio' || name === 'diameter' || 
+        name === 'brand' || name === 'model' || name === 'type') {
+      const hasSize = newFormData.width || newFormData.aspectRatio || newFormData.diameter;
+      const hasType = newFormData.type;
+      
+      if (hasSize || hasType) {
+        onSearch(newFormData);
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -49,15 +60,14 @@ const TireSearchForm = ({ onSearch }) => {
       diameter: '',
       brand: '',
       model: '',
-      type: '',
-      minPrice: '',
-      maxPrice: ''
+      type: ''
     });
   };
 
   return (
     <div className="search-form-container">
-      <h2>🔍 タイヤ検索</h2>
+      <h2>🔍 ブリヂストン冬タイヤ検索</h2>
+      <p>サイズや種類を選択すると自動的に価格が表示されます</p>
       <form onSubmit={handleSubmit} className="search-form">
         <div className="form-row">
           <div className="form-group">
@@ -158,38 +168,8 @@ const TireSearchForm = ({ onSearch }) => {
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="minPrice">最低価格 (円)</label>
-            <input
-              type="number"
-              id="minPrice"
-              name="minPrice"
-              value={formData.minPrice}
-              onChange={handleInputChange}
-              placeholder="例: 10000"
-              min="0"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="maxPrice">最高価格 (円)</label>
-            <input
-              type="number"
-              id="maxPrice"
-              name="maxPrice"
-              value={formData.maxPrice}
-              onChange={handleInputChange}
-              placeholder="例: 100000"
-              min="0"
-            />
-          </div>
-        </div>
 
         <div className="form-actions">
-          <button type="submit" className="search-btn">
-            🔍 検索
-          </button>
           <button type="button" onClick={handleClear} className="clear-btn">
             🗑️ クリア
           </button>

@@ -45,12 +45,12 @@ function App() {
   const handleSearch = (searchParams) => {
     setIsSearching(true);
     
-    // シミュレートされた検索遅延
+    // 短い検索遅延（リアルタイム検索用）
     setTimeout(() => {
       const filteredResults = filterTires(allTireData, searchParams);
       setSearchResults(filteredResults);
       setIsSearching(false);
-    }, 500);
+    }, 100);
   };
 
   const filterTires = (tires, params) => {
@@ -68,10 +68,6 @@ function App() {
       
       // タイプフィルタ
       if (params.type && tire.type !== params.type) return false;
-      
-      // 価格フィルタ
-      if (params.minPrice && tire.price < parseInt(params.minPrice)) return false;
-      if (params.maxPrice && tire.price > parseInt(params.maxPrice)) return false;
       
       return true;
     });
