@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/tire-price-app/static/css/main.15c0d9e8.css",
+    "main.css": "/tire-price-app/static/css/main.97b70d12.css",
     "main.js": "/tire-price-app/static/js/main.97e56934.js",
     "static/js/453.43d84bdf.chunk.js": "/tire-price-app/static/js/453.43d84bdf.chunk.js",
     "index.html": "/tire-price-app/index.html",
-    "main.15c0d9e8.css.map": "/tire-price-app/static/css/main.15c0d9e8.css.map",
+    "main.97b70d12.css.map": "/tire-price-app/static/css/main.97b70d12.css.map",
     "main.97e56934.js.map": "/tire-price-app/static/js/main.97e56934.js.map",
     "453.43d84bdf.chunk.js.map": "/tire-price-app/static/js/453.43d84bdf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.15c0d9e8.css",
+    "static/css/main.97b70d12.css",
     "static/js/main.97e56934.js"
   ]
 }
