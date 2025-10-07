@@ -59,7 +59,12 @@ export const loadCSVData = async (csvPath) => {
 export const loadBridgestoneData = async () => {
   try {
     console.log('CSVデータ読み込み開始...');
-    const csvData = await loadCSVData('/data/bridgestone_data.csv');
+    // GitHub Pages用にパスを修正
+    const csvPath = process.env.NODE_ENV === 'production' 
+      ? './data/bridgestone_data.csv' 
+      : '/data/bridgestone_data.csv';
+    console.log('CSVパス:', csvPath);
+    const csvData = await loadCSVData(csvPath);
     console.log('CSVデータ取得成功:', csvData.length, '行');
     
     if (csvData.length === 0) {

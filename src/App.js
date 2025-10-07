@@ -19,16 +19,19 @@ function App() {
       setIsLoadingData(true);
       try {
         // まずCSVデータを試す
+        console.log('CSVデータ読み込み開始...');
         const csvData = await loadBridgestoneData();
+        console.log('CSVデータ読み込み結果:', csvData);
         if (csvData.length > 0) {
           setAllTireData(csvData);
           setDataSource('csv');
           console.log(`CSVデータを読み込みました: ${csvData.length}件`);
+          console.log('最初の3件のデータ:', csvData.slice(0, 3));
         } else {
           // CSVデータがない場合はサンプルデータを使用
           setAllTireData(sampleTireData);
           setDataSource('sample');
-          console.log('サンプルデータを使用します');
+          console.log('CSVデータが空のため、サンプルデータを使用します');
         }
       } catch (error) {
         console.error('データ読み込みエラー:', error);
