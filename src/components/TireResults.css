@@ -32,16 +32,16 @@
 
 .sort-controls select {
   padding: 0.5rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #f0e68c;
   border-radius: 6px;
   font-size: 0.9rem;
 }
 
 .sort-order-btn {
   padding: 0.5rem;
-  border: 2px solid #e1e5e9;
+  border: 2px solid #f0e68c;
   border-radius: 6px;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
@@ -49,8 +49,8 @@
 }
 
 .sort-order-btn:hover {
-  background: #f8f9fa;
-  border-color: #3498db;
+  background: rgba(240, 230, 140, 0.3);
+  border-color: #d4c94a;
 }
 
 .tire-grid {
@@ -60,12 +60,13 @@
 }
 
 .tire-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e1e5e9;
+  border: 1px solid #f0e68c;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .tire-card:hover {
@@ -129,8 +130,8 @@
 }
 
 .feature-tag {
-  background: #3498db;
-  color: white;
+  background: #d4c94a;
+  color: #333;
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -159,9 +160,9 @@
 .tire-price-breakdown {
   margin-bottom: 1rem;
   padding: 0.75rem;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  background: rgba(240, 230, 140, 0.1);
   border-radius: 8px;
-  border: 2px solid #dee2e6;
+  border: 2px solid #f0e68c;
 }
 
 .price-item {
@@ -195,7 +196,7 @@
 }
 
 .price-item.total {
-  border-top: 2px solid #3498db;
+  border-top: 2px solid #d4c94a;
   padding-top: 0.5rem;
   margin-top: 0.5rem;
   font-weight: bold;
@@ -205,7 +206,7 @@
 .total-price {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #e74c3c;
+  color: #d4c94a;
 }
 
 .tire-actions {
@@ -226,22 +227,22 @@
 }
 
 .detail-btn {
-  background: #3498db;
-  color: white;
+  background: #d4c94a;
+  color: #333;
 }
 
 .detail-btn:hover {
-  background: #2980b9;
+  background: #c4b83d;
   transform: translateY(-1px);
 }
 
 .compare-btn {
-  background: #95a5a6;
+  background: #a0a0a0;
   color: white;
 }
 
 .compare-btn:hover {
-  background: #7f8c8d;
+  background: #888;
   transform: translateY(-1px);
 }
 

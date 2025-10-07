@@ -9,7 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f0e68c 0%, #e6d373 100%);
   min-height: 100vh;
 }
 
@@ -20,8 +20,8 @@ body {
 }
 
 .App-header {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
-  color: white;
+  background: linear-gradient(135deg, #d4c94a, #c4b83d);
+  color: #333;
   padding: 2rem 1rem;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -31,25 +31,24 @@ body {
   margin: 0 0 0.5rem 0;
   font-size: 2.5rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #3498db, #e74c3c);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #2c3e50;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .App-header p {
   margin: 0;
   font-size: 1.2rem;
-  color: #ecf0f1;
+  color: #555;
   opacity: 0.9;
 }
 
 .data-source-info {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 20px;
   font-size: 0.9rem;
+  color: #444;
   backdrop-filter: blur(10px);
 }
 
@@ -62,31 +61,33 @@ body {
 .loading {
   text-align: center;
   padding: 2rem;
-  color: white;
+  color: #333;
   font-size: 1.2rem;
 }
 
 .loading p {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   padding: 1rem 2rem;
   border-radius: 12px;
   display: inline-block;
   backdrop-filter: blur(10px);
+  color: #444;
 }
 
 .no-results {
   text-align: center;
   padding: 2rem;
-  color: white;
+  color: #333;
   font-size: 1.2rem;
 }
 
 .no-results p {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   padding: 1rem 2rem;
   border-radius: 12px;
   display: inline-block;
   backdrop-filter: blur(10px);
+  color: #444;
 }
 
 @media (max-width: 768px) {
